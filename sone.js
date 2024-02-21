@@ -23,25 +23,19 @@ sone.addRequete = function (requete, name_requete)
     sone.listRequete.push(name_requete);
 }
 
-sone.run = function (port, t)
+sone.run = function (port, sone)
 {
     const serv = function (req, res)
     {
         let requete = url.parse(req.url, true);
         let pathname = requete.pathname;
         let query = requete.query;
-        t.requete(req, res, query, pathname);
+        sone.requete(req, res, query, pathname);
     }
 
     http.createServer(serv).listen(port);
     console.log("Server running on port " + port);
 } 
 
-
-
-
-
-/*let obj = {'name' : 'oui', 'fct' : (x)=>{x*2; console.log(obj.name); obj.t = x, obj.list.push(x)}, 'list' : []};
-console.log(obj.t);*/
 
 module.exports = sone;
