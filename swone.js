@@ -5,6 +5,8 @@ const url = require("url");
 const path = require("path");
 const fs = require("fs");
 const nunjucks = require("nunjucks");
+const formidable = require("formidable");
+const mail = require("nodemailer");
 
 let swone = {};
 swone.listRequete = [];
@@ -96,7 +98,7 @@ swone.addRequete = function (requete, name_requete)
 }
 
 //EXECUTE LE SERVEUR
-swone.run = function (port, swone)
+swone.run = function (port)
 {
     const serv = function (req, res)
     {
@@ -156,7 +158,7 @@ swone.grid = function (height, width, value)
     return grid;
 }
 
-swone.signUp = function (data, path)
+swone.signUp = function (path,data , verif)
 {
     let membres = swone.get(path);
 
@@ -164,13 +166,13 @@ swone.signUp = function (data, path)
 
     for (let i = 0; i < membres.length; i++)
     {
-        if (data.pseudo === membres[i].pseudo)
+        if (data[verif] === membres[i][verif])
         {
             match = true;
             return false;
         }
     }
-    if (match === false)
+    if (match === false)//simplification a faire ici
     {
         membres.push(data);
         swone.write(path, membres);
@@ -203,5 +205,35 @@ swone.display = function (path, marqueurs, code, res)
 	res.write(page);
 	res.end();
 }	
+
+swone.download = function (path, fct, req)
+{
+    let form = new formidable.IncomingForm(
+        {
+            uploadDir: path, 
+            keepExtensions: true
+        });
+        if (typeof fct === 'function')
+        {
+            try {
+                form.parse(req, fct)
+                } catch (e) {console.log(e)}
+        }
+        else 
+        {
+            try {
+                form.parse(req, () => {});
+                } catch (e) {console.log(e)}
+        }
+        
+}
+
+swone.download.form = function (requete)
+{
+    return `<form action=${requete} method="post" enctype="multipart/form-data">
+            <input type="file" name="filetoupload"><br>
+            <input type="submit" name="media" value="envoyer">
+            </form>`;
+}
 
 module.exports = swone;
