@@ -1,0 +1,17 @@
+{
+  "name": "sone",
+  "version": "0.0.1",
+  "description": "Mini framework destiné à l'usage des étudiants de l'esiea",
+  "main": "sone.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "esiea"
+  ],
+  "author": "Anis Chara",
+  "license": "ISC",
+  "devDependencies": {
+    "nunjucks": "^3.2.4"
+  }
+}
