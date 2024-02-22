@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>NoFlexHere</title>
+		<link rel="stylesheet" type="text/css" href="./TL.css">
+		<meta charset="utf-8">
+	</head>
+	<body>
+		<div class="container">
+			<h1>NoFlexHere</h1>
+			<h2>Montrer ses W ne veut pas forcément dire flex</h2>
+			{% for post in posts | reverse %}
+			<div class="post">
+			<div class="pseudo">
+			{{ post.pseudo }}<br>
+			</div>
+			<div class="titre">
+			{{ post.titre }}<br>
+			</div>
+			<div class="contenu">
+			{{ post.contenu }}<br>
+			<div class="media">
+			{{ post.media | safe }}<br>
+			</div>
+			</div>
+			<div class="date">
+			{{ post.date }}<br>
+			</div>
+			</div>
+			{% else %}
+			<li>Ta TL est vide...</li>
+			{% endfor %}
+		</div>
+			<a href="req_form_post?pseudo={{ pseudo }}" ><img src='./../add.png' class="add"></a>
+	</body>
+</html>

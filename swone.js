@@ -4,6 +4,7 @@ const http = require("http");
 const url = require("url");
 const path = require("path");
 const fs = require("fs");
+const nunjucks = require("nunjucks");
 
 let swone = {};
 swone.listRequete = [];
@@ -155,7 +156,7 @@ swone.grid = function (height, width, value)
     return grid;
 }
 
-swone.signUP = function (data, path)
+swone.signUp = function (data, path)
 {
     let membres = swone.get(path);
 
@@ -191,5 +192,16 @@ swone.login = function (data, path)
     }
     return false;
 }
+
+swone.display = function (path, marqueurs, code, res)
+{
+    let page = fs.readFileSync(path, 'utf-8');
+
+	page = nunjucks.renderString(page, marqueurs);
+
+	res.writeHead(code, { 'Content-Type': 'text/html' });
+	res.write(page);
+	res.end();
+}	
 
 module.exports = swone;

@@ -1,8 +1,8 @@
 {
-  "name": "sone",
+  "name": "swone",
   "version": "0.0.1",
   "description": "Mini framework destiné à l'usage des étudiants de l'esiea",
-  "main": "sone.js",
+  "main": "swone.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
