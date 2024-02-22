@@ -5,19 +5,19 @@ const url = require("url");
 const path = require("path");
 const fs = require("fs");
 
-let sone = {};
-sone.listRequete = [];
-sone.listNameRequete = [];
+let swone = {};
+swone.listRequete = [];
+swone.listNameRequete = [];
 
-sone.requete = function (req, res, query, pathname)
+swone.requete = function (req, res, query, pathname)
 {
     //IDENTIFIE LA BONNE REQUETE 
-    for (let i = 0; i < sone.listNameRequete.length; i++)
+    for (let i = 0; i < swone.listNameRequete.length; i++)
     {
-        if (pathname === sone.listNameRequete[i])
+        if (pathname === swone.listNameRequete[i])
         {
             try {
-            sone.listRequete[i](req, res, query);
+            swone.listRequete[i](req, res, query);
             } catch (e) {
                 
             console.log('Erreur : ' + e.stack);
@@ -88,28 +88,28 @@ sone.requete = function (req, res, query, pathname)
     req_statique(req, res, query);
 }
 //ENREGISTRE LES REQUETES
-sone.addRequete = function (requete, name_requete)
+swone.addRequete = function (requete, name_requete)
 {
-    sone.listRequete.push(requete);
-    sone.listNameRequete.push(name_requete);
+    swone.listRequete.push(requete);
+    swone.listNameRequete.push(name_requete);
 }
 
 //EXECUTE LE SERVEUR
-sone.run = function (port, sone)
+swone.run = function (port, swone)
 {
     const serv = function (req, res)
     {
         let requete = url.parse(req.url, true);
         let pathname = requete.pathname;
         let query = requete.query;
-        sone.requete(req, res, query, pathname);
+        swone.requete(req, res, query, pathname);
     }
 
     http.createServer(serv).listen(port);
     console.log("Server running on port " + port);
 }
 
-sone.switchB = function (variable)
+swone.switchB = function (variable)
 {
     if (variable === true) variable = false;
     else if (variable === false) variable = true;
@@ -117,17 +117,17 @@ sone.switchB = function (variable)
     return variable;
 }
 
-sone.get = function (path)
+swone.get = function (path)
 {
     return JSON.parse(fs.readFileSync(path));
 }
 
-sone.write = function (path, data)
+swone.write = function (path, data)
 {
     fs.writeFileSync(path, JSON.stringify(data), 'utf-8');
 }
 
-sone.gridList = function (height, width, value)
+swone.gridList = function (height, width, value)
 {
     let grid = [];
     for (let i = 0; i < height; i++)
@@ -141,7 +141,7 @@ sone.gridList = function (height, width, value)
     return grid;
 }
 
-sone.grid = function (height, width, value)
+swone.grid = function (height, width, value)
 {
     let grid = "";
     for (let i = 0; i < height; i++)
@@ -155,9 +155,9 @@ sone.grid = function (height, width, value)
     return grid;
 }
 
-sone.signUP = function (data, path)
+swone.signUP = function (data, path)
 {
-    let membres = sone.get(path);
+    let membres = swone.get(path);
 
     let match = false;
 
@@ -172,13 +172,13 @@ sone.signUP = function (data, path)
     if (match === false)
     {
         membres.push(data);
-        sone.write(path, membres);
+        swone.write(path, membres);
         return true;
     }
 }
-sone.login = function (data, path)
+swone.login = function (data, path)
 {
-    let membres = sone.get(path);
+    let membres = swone.get(path);
     let match = false;
 
     for (let i = 0; i < membres.length; i++)
@@ -192,7 +192,4 @@ sone.login = function (data, path)
     return false;
 }
 
-
-
-
-module.exports = sone;
+module.exports = swone;
