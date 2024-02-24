@@ -1,6 +1,6 @@
 {
   "name": "swone",
-  "version": "0.0.10",
+  "version": "0.0.11",
   "description": "Mini framework destiné à l'usage des étudiants de l'esiea",
   "main": "swone.js",
   "scripts": {
