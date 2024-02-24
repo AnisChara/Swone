@@ -12,7 +12,7 @@
   ],
   "author": "Anis Chara",
   "license": "ISC",
-  "Dependencies": {
+  "dependencies": {
     "formidable": "^3.5.1",
     "nodemailer": "^6.9.10",
     "nunjucks": "^3.2.4"
