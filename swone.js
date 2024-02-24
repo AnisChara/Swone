@@ -91,14 +91,14 @@ swone.requete = function (req, res, query, pathname)
     req_statique(req, res, query);
 }
 //ENREGISTRE LES REQUETES
-swone.addRequete = function (requete, name_requete)
+swone.addRequete = function (requete, name_requete)// GOOD
 {
     swone.listRequete.push(requete);
     swone.listNameRequete.push(name_requete);
 }
 
 //EXECUTE LE SERVEUR
-swone.run = function (port)
+swone.run = function (port)// GOOD
 {
     const serv = function (req, res)
     {
@@ -158,44 +158,79 @@ swone.grid = function (height, width, value)
     return grid;
 }
 
-swone.signUp = function (path,data , verif)
+swone.signUp = function (path,data , verif)// GOOD
 {
     let membres = swone.get(path);
 
-    let match = false;
-
-    for (let i = 0; i < membres.length; i++)
+    if (Array.isArray(verif)=== false)
     {
-        if (data[verif] === membres[i][verif])
+        for (let i = 0; i < membres.length; i++)
         {
-            match = true;
-            return false;
+            if (data[verif] === membres[i][verif])
+            {
+                return membres[i];
+            }
         }
-    }
-    if (match === false)//simplification a faire ici
-    {
         membres.push(data);
         swone.write(path, membres);
         return true;
     }
+    if (Array.isArray(verif)=== true)
+    {
+        for (let i = 0; i < membres.length; i++)
+        {
+            for (let j = 0; j < verif.length; j++)
+            {
+                if (data[verif[j]] === membres[i][verif[j]])
+                {
+                    return membres[i];
+                }
+            }
+            
+        }
+        membres.push(data);
+        swone.write(path, membres);
+        return true;
+    }
+
 }
-swone.login = function (data, path)
+swone.login = function (path,data , verif)// GOOD
 {
     let membres = swone.get(path);
-    let match = false;
 
-    for (let i = 0; i < membres.length; i++)
+    if (Array.isArray(verif)=== false)
     {
-        if (data.pseudo === membres[i].pseudo)
+        for (let i = 0; i < membres.length; i++)
         {
-            match = true;
-            return true;
+            if (data[verif] === membres[i][verif])
+            {
+                return membres[i];
+            }
         }
+        return false;
     }
-    return false;
+    if (Array.isArray(verif)=== true)
+    {
+        for (let i = 0; i < membres.length; i++)
+        {
+            let match =0;
+
+            for (let j = 0; j < verif.length; j++)
+            {
+                if (data[verif[j]] === membres[i][verif[j]])
+                {
+                    match++;
+                }
+            }
+            if (match === verif.length) return membres[i];
+            
+        }
+        return false;
+    }
+
 }
 
-swone.display = function (path, marqueurs, code, res)
+swone.display = function (path, marqueurs, code, res)// GOOD
 {
     let page = fs.readFileSync(path, 'utf-8');
 
@@ -228,12 +263,18 @@ swone.download = function (path, fct, req)
         
 }
 
-swone.download.form = function (requete)
+swone.download.form = function (requete,classe)
 {
-    return `<form action=${requete} method="post" enctype="multipart/form-data">
+    if (classe)
+    {return `<form action=${requete} method="post" enctype="multipart/form-data">
+            <input type="file" name="filetoupload" class=${classe}><br>
+            <input type="submit" name="media" value="envoyer" class=${classe}>
+            </form>`;}
+    else 
+    {return `<form action=${requete} method="post" enctype="multipart/form-data">
             <input type="file" name="filetoupload"><br>
             <input type="submit" name="media" value="envoyer">
-            </form>`;
+            </form>`;}
 }
 
 module.exports = swone;
