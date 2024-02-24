@@ -46,7 +46,7 @@ swone.requete = function (req, res, query, pathname)
     
         // FABRIQUE LE PATH ABSOLU DU FICHIER DEMANDE
     
-        file = __dirname + file;
+        file = './' + file;
     
         // AJUSTE LE TYPE EN FONCTION DE L'EXTENSION
     
