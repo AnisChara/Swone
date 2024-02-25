@@ -44,8 +44,6 @@ swone.requete = function (req, res, query, pathname)
         let sousType;
         let file = url.parse(req.url).pathname;
     
-        // FABRIQUE LE PATH ABSOLU DU FICHIER DEMANDE
-    
         file = './' + file;
     
         // AJUSTE LE TYPE EN FONCTION DE L'EXTENSION
