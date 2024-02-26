@@ -8,10 +8,21 @@ const nunjucks = require("nunjucks");
 const formidable = require("formidable");
 const mail = require("nodemailer");
 
+/**
+ * Main application object.
+ * @namespace
+ */
 let swone = {};
 swone.listRequete = [];
 swone.listNameRequete = [];
 
+/**
+ * Handles incoming requests and routes them to the appropriate function.
+ * @param {http.IncomingMessage} req - The incoming HTTP request.
+ * @param {http.ServerResponse} res - The outgoing HTTP response.
+ * @param {Object} query - The parsed query string as an object.
+ * @param {string} pathname - The path section of the URL.
+ */
 swone.requete = function (req, res, query, pathname)
 {
     //IDENTIFIE LA BONNE REQUETE 
@@ -88,14 +99,22 @@ swone.requete = function (req, res, query, pathname)
     };
     req_statique(req, res, query);
 }
-//ENREGISTRE LES REQUETES
+
+/**
+ * Adds a new request handler function with its associated path.
+ * @param {Function} requete - The request handler function to add.
+ * @param {string} name_requete - The path associated with the request handler.
+ */
 swone.addRequete = function (requete, name_requete)// GOOD
 {
     swone.listRequete.push(requete);
     swone.listNameRequete.push(name_requete);
 }
 
-//EXECUTE LE SERVEUR
+/**
+ * Initializes and starts the HTTP server on the specified port.
+ * @param {number} port - The port number on which the server should listen.
+ */
 swone.run = function (port)// GOOD
 {
     const serv = function (req, res)
@@ -110,24 +129,54 @@ swone.run = function (port)// GOOD
     console.log("Server running on port " + port);
 }
 
+/**
+ * Toggles a boolean value.
+ * @param {boolean} variable - The boolean value to toggle.
+ * @returns {boolean} The toggled boolean value.
+ */
 swone.switchB = function (variable)
 {
-    if (variable === true) variable = false;
-    else if (variable === false) variable = true;
+    return !!!variable;
+    //An advanced trick ensuring safety, conversion and efficiency... But quite esoteric 
 
-    return variable;
+    //first ! :  If its a boolean, good, it just flip it. Else, it forces the thruthness conversion of the variable and ensure it's a boolean and flip it.
+    //second ! : restore the boolean to the original "thruthness"
+    //third ! : flip back to finaly toggle the boolean value
+
+    // complexity : O(n)= 3  operations
+    // instead of calling ternary branching operator in the CPU (the IFs) 🤯
+
+    //I love JS for this kind of quirks...
+    //BUUUUUT, it's completly overkill for small applications 🫤
 }
 
+/**
+ * Reads and parses a JSON file.
+ * @param {string} path - The file path to read from.
+ * @returns {Object} The parsed JSON object from the file.
+ */
 swone.get = function (path)
 {
     return JSON.parse(fs.readFileSync(path));
 }
 
+/**
+ * Writes an object as a JSON string to a file.
+ * @param {string} path - The file path to write to.
+ * @param {Object} data - The data to write as JSON.
+ */
 swone.write = function (path, data)
 {
     fs.writeFileSync(path, JSON.stringify(data), 'utf-8');
 }
 
+/**
+ * Creates a 2D grid list initialized with a specific value.
+ * @param {number} height - The number of rows in the grid.
+ * @param {number} width - The number of columns in the grid.
+ * @param {*} value - The value to initialize each cell of the grid with.
+ * @returns {Array<Array<*>>} A 2D grid list.
+ */
 swone.gridList = function (height, width, value)
 {
     let grid = [];
@@ -142,6 +191,13 @@ swone.gridList = function (height, width, value)
     return grid;
 }
 
+/**
+ * Creates a string representation of a 2D grid initialized with a specific value.
+ * @param {number} height - The number of rows in the grid.
+ * @param {number} width - The number of columns in the grid.
+ * @param {string} value - The value to initialize each cell of the grid with.
+ * @returns {string} A string representing the 2D grid.
+ */
 swone.grid = function (height, width, value)
 {
     let grid = "";
@@ -156,6 +212,13 @@ swone.grid = function (height, width, value)
     return grid;
 }
 
+/**
+ * Handles user signup by adding their data to a file if validation passes.
+ * @param {string} path - The path to the file storing user data.
+ * @param {Object} data - The user data to add.
+ * @param {(string|Array<string>)} verif - The field(s) to validate the uniqueness of the user data.
+ * @returns {(Object|boolean)} The user data if signup is successful, or true if validation fails.
+ */
 swone.signUp = function (path,data , verif)// GOOD
 {
     let membres = swone.get(path);
@@ -192,6 +255,14 @@ swone.signUp = function (path,data , verif)// GOOD
     }
 
 }
+
+/**
+ * Handles user login by checking their data against a file.
+ * @param {string} path - The path to the file storing user data.
+ * @param {Object} data - The user data to check.
+ * @param {(string|Array<string>)} verif - The field(s) to validate the user data against.
+ * @returns {(Object|boolean)} The user data if login is successful, or false if validation fails.
+ */
 swone.login = function (path,data , verif)// GOOD
 {
     let membres = swone.get(path);
@@ -228,6 +299,13 @@ swone.login = function (path,data , verif)// GOOD
 
 }
 
+/**
+ * Renders a template with given data and sends it as an HTTP response.
+ * @param {string} path - The path to the template file.
+ * @param {Object} marqueurs - The data to render the template with.
+ * @param {number} code - The HTTP status code to send.
+ * @param {http.ServerResponse} res - The outgoing HTTP response.
+ */
 swone.display = function (path, marqueurs, code, res)// GOOD
 {
     let page = fs.readFileSync(path, 'utf-8');
@@ -238,7 +316,15 @@ swone.display = function (path, marqueurs, code, res)// GOOD
 	res.write(page);
 	res.end();
 }	
+//Quentin : i let you discover express.js, an simple node HTTP server doing... exactly that. (a function called 'render')
+//yep, the whole semester can be shorter with the right tools 😁. But not efficient to learn.
 
+/**
+ * Handles file upload requests.
+ * @param {string} path - The directory path to save uploaded files.
+ * @param {Function} [fct] - An optional callback function to execute upon file upload.
+ * @param {http.IncomingMessage} req - The incoming HTTP request with the file data.
+ */
 swone.download = function (path, fct, req)
 {
     let form = new formidable.IncomingForm(
@@ -246,7 +332,7 @@ swone.download = function (path, fct, req)
             uploadDir: path, 
             keepExtensions: true
         });
-        if (typeof fct === 'function')
+        if (typeof fct === 'function')//nice ! The right use for callbacks !
         {
             try {
                 form.parse(req, fct)
@@ -258,9 +344,14 @@ swone.download = function (path, fct, req)
                 form.parse(req, () => {});
                 } catch (e) {console.log(e)}
         }
-        
 }
 
+/**
+ * Generates HTML form markup for file upload.
+ * @param {string} requete - The request path the form should post to.
+ * @param {string} [classe] - An optional CSS class to apply to the form elements.
+ * @returns {string} The HTML markup for the file upload form.
+ */
 swone.download.form = function (requete,classe)
 {
     if (classe)

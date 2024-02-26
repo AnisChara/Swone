@@ -10,7 +10,7 @@
     "esiea",
     "swone"
   ],
-  "author": "Anis Chara",
+  "author": "Anis Chara <chara@et.esiea.fr>",
   "license": "ISC",
   "dependencies": {
     "formidable": "^3.5.1",

@@ -1,0 +1,3 @@
+node_modules/
+# Quentin : without the gitignore and the line aboute, git will index ALL files in node_modules... Which are restored using npm (and polluting the git commits history)
+# It is (helas) too late now, but i'v marked the folder as untracked. You'll have to run npm i to restore the folder.
