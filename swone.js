@@ -217,7 +217,7 @@ swone.grid = function (height, width, value)
  * @param {string} path - The path to the file storing user data.
  * @param {Object} data - The user data to add.
  * @param {(string|Array<string>)} verif - The field(s) to validate the uniqueness of the user data.
- * @returns {(Object|boolean)} The user data if signup is successful, or true if validation fails.
+ * @returns {(Object|boolean)} True if signup is successful, or user who matches with the verif properties if validation fails.
  */
 swone.signUp = function (path,data , verif)// GOOD
 {
