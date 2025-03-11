@@ -1,9 +1,10 @@
 # Swone
 
-Swone est un framework destiné à l'usage des étudiants de l'ESIEA, mais est accessible à tous.
+Swone est un package npm destiné à l'usage des étudiants de l'ESIEA, mais est accessible à tous.
 Je l'ai fais pour m'amuser mais s'il venait à vous être utile alors j'en serais fier 😊
 Je met en lien la documentation avec l'explication de chaque fonctions.
 Pour me contacter en cas de question ou de suggestion : chara@et.esiea.fr
 
 Documentation : https://files.fm/f/xprfbxuasn
+npm : https://www.npmjs.com/package/swone
 
