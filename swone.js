@@ -55,7 +55,7 @@ swone.requete = function (req, res, query, pathname)
         let sousType;
         let file = url.parse(req.url).pathname;
     
-        file = './' + file;
+        file = __dirname + file;
     
         // AJUSTE LE TYPE EN FONCTION DE L'EXTENSION
     
